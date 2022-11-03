@@ -1,0 +1,29 @@
+package dev.ecommerce.backend.common.auditor;
+
+import java.util.Optional;
+
+import org.springframework.data.domain.AuditorAware;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
+
+@Component
+public class AuditorAwareImpl implements AuditorAware<String> {
+
+	@Override
+	public Optional<String> getCurrentAuditor() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		
+		if(auth == null)
+			return Optional.ofNullable(null);
+		
+		if(auth.getPrincipal() instanceof String p)
+			return Optional.ofNullable(p);
+		
+		UserDetails currentAuditor = (UserDetails) auth.getPrincipal();
+		
+		return Optional.ofNullable(currentAuditor.getUsername());
+	}
+
+}

@@ -3,6 +3,7 @@ package dev.ecommerce.backend.role.dto;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import dev.ecommerce.backend.common.model.BaseEntity;
 import dev.ecommerce.backend.role.validation.annotation.UniqueGroupName;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @NoArgsConstructor
 @SuperBuilder
-public class EGroupDTO {
+public class EGroupDTO extends BaseEntity{
 	@NotBlank
 	@Size(min=5,max=100,message="{group.name.notblank}")
 	@UniqueGroupName(message="{group.name.existed}")
