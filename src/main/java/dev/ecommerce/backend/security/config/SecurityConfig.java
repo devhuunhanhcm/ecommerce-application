@@ -1,5 +1,7 @@
 package dev.ecommerce.backend.security.config;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
 import dev.ecommerce.backend.security.jwt.JwtAuthenrizationFilter;
 
@@ -44,7 +47,13 @@ public class SecurityConfig {
 	
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.cors();
+		http.cors().configurationSource(request -> {
+			var cors = new CorsConfiguration();
+		      cors.setAllowedOrigins(List.of("http://localhost:3000"));
+		      cors.setAllowedMethods(List.of("GET","POST", "PUT", "DELETE", "OPTIONS"));
+		      cors.setAllowedHeaders(List.of("*"));
+		      return cors;
+		});
 		http.csrf().disable();
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		//JWT filter 

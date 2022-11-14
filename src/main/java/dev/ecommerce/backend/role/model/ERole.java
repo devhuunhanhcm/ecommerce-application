@@ -3,8 +3,11 @@ package dev.ecommerce.backend.role.model;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
@@ -28,4 +31,22 @@ public class ERole extends BaseEntity {
 	
 	@ManyToMany(mappedBy = "roles")
 	private Set<EGroup> groups = new LinkedHashSet<EGroup>();
+	
+	@ManyToMany(cascade = {CascadeType.MERGE,CascadeType.PERSIST})
+	@JoinTable(name="e_role_program",
+	joinColumns = @JoinColumn(name="role_id"),
+	inverseJoinColumns = @JoinColumn(name="program_id"))
+	private Set<EProgram> programs = new LinkedHashSet<EProgram>();
+	
+	public void addProgram(EProgram program) {
+		programs.add(program);
+		program.getRoles().add(this);
+	}
+	public void removeProgram(EProgram program) {
+		programs.remove(program);
+		program.getRoles().remove(this);
+	}
+	public void clearProgram() {
+		programs.clear();
+	}
 }
