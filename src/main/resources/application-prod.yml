@@ -8,8 +8,10 @@ spring:
     init:
       mode: always
   flyway:
+   enabled: true 
    url: jdbc:postgresql://${PROD_DB_HOST}:${PROD_DB_PORT}/${PROD_DB_NAME}
-   user: ${PROD_DB_USERNAME}
+   user: postgres
    password: ${PROD_DB_PASSWORD}
+   table: flyway_schema_history
       
       
