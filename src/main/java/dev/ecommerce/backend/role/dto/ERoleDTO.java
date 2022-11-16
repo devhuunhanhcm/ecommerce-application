@@ -14,7 +14,7 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @NoArgsConstructor
 @SuperBuilder
-public class ERoleDTO extends BaseEntity {
+public class ERoleDTO {
 	@NotBlank
 	@Size(min=5,max=100,message="{role.name.size}")
 	@UniqueRoleName(message="{role.name.existed}")

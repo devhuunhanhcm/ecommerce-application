@@ -35,6 +35,7 @@ public class EUserController {
 	
 	@Autowired
 	private AuditorAwareImpl auditor;
+	
 	@GetMapping
 	public Object findAllUser() {
 		return ResponseHelper.getResponse(service.findAll(), HttpStatus.OK);

@@ -48,7 +48,7 @@ public class ERoleController {
 		
 		return ResponseHelper.getResponse(newDTO, HttpStatus.OK);
 	}
-	@PostMapping
+	@PostMapping("/new")
 	public Object createNewRole(@Valid @RequestBody ERoleDTO dto,BindingResult bindingResult) {
 		if(bindingResult.hasErrors())
 			return ResponseHelper.getErrorResponse(bindingResult, HttpStatus.BAD_REQUEST);

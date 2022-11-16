@@ -1,0 +1,21 @@
+server:
+  port: 8080
+spring:
+  security:
+    user:
+      name: admin
+      password: 1234
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: 1234
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    generate-ddl: false
+    show-sql: true
+  flyway:
+    enabled: true
+app:
+  jwt:
+    secret: abcdefghijklmnOPQRSTUVWXYZ
