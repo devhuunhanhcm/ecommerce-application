@@ -22,6 +22,7 @@ public class EUserLoginDTO {
 	private String username;
 	
 	@NotBlank
+	@Size(min = 8, max = 100, message = "{user.password.size}")
 	private String password;
 	
 	@NotBlank

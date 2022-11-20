@@ -6,6 +6,7 @@ import org.mapstruct.factory.Mappers;
 import dev.ecommerce.backend.user.dto.EUserDTO;
 import dev.ecommerce.backend.user.dto.EUserDetailsDTO;
 import dev.ecommerce.backend.user.dto.EUserLoginDTO;
+import dev.ecommerce.backend.user.dto.EUserRegisterDTO;
 import dev.ecommerce.backend.user.model.EUser;
 
 @Mapper
