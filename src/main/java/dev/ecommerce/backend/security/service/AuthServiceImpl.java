@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import dev.ecommerce.backend.security.dto.LoginDTO;
 import dev.ecommerce.backend.security.jwt.JwtHelper;
 import dev.ecommerce.backend.user.dto.EUserRegisterDTO;
+import dev.ecommerce.backend.user.dto.EUserWithTokenDTO;
 import dev.ecommerce.backend.user.mapper.EUserMapper;
 import dev.ecommerce.backend.user.model.EUser;
 import dev.ecommerce.backend.user.model.UserStatus;
@@ -28,14 +29,23 @@ public class AuthServiceImpl implements AuthService{
 	private JwtHelper jwts;
 	
 	@Override
-	public String login(LoginDTO dto) {
+	public EUserWithTokenDTO login(LoginDTO dto) {
 		Optional<EUser> userOpt = repository.findByUsername(dto.getUsername());
 		if(userOpt.isEmpty())
 			return null;
+		String token;
 		if(passwordEncoder.matches(dto.getPassword(), userOpt.get().getPassword()))
-			return jwts.generateJwtToken(dto.getUsername());
+			token = jwts.generateJwtToken(dto.getUsername());
+		else 
+			return null;
 		
-		return null;
+		EUser user = userOpt.get();
+		return EUserWithTokenDTO.builder()
+								.displayName(user.getDisplayName())
+								.email(user.getEmail())
+								.username(user.getUsername())
+								.token(token)
+								.build();
 	}
 
 	@Override

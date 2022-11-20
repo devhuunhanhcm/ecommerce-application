@@ -14,6 +14,7 @@ import dev.ecommerce.backend.common.helper.ResponseHelper;
 import dev.ecommerce.backend.security.dto.LoginDTO;
 import dev.ecommerce.backend.security.service.AuthService;
 import dev.ecommerce.backend.user.dto.EUserRegisterDTO;
+import dev.ecommerce.backend.user.dto.EUserWithTokenDTO;
 
 @RestController
 @RequestMapping("api/v1/auth")
@@ -26,10 +27,10 @@ public class AuthController {
 		if(bindingResult.hasErrors())
 			return ResponseHelper.getErrorResponse(bindingResult, HttpStatus.BAD_REQUEST);
 		
-		String token = service.login(dto);
-		if(token == null)
+		EUserWithTokenDTO userWithToken = service.login(dto);
+		if(userWithToken == null)
 			return ResponseHelper.getErrorResponse("Username or password is not correct.", HttpStatus.BAD_REQUEST);
-		return ResponseHelper.getResponse(token, HttpStatus.OK);
+		return ResponseHelper.getResponse(userWithToken, HttpStatus.OK);
 	}
 	@PostMapping("/register")
 	public Object register(@Valid @RequestBody EUserRegisterDTO dto,BindingResult bindingResult ) {
