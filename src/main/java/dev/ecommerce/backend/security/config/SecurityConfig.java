@@ -50,7 +50,6 @@ public class SecurityConfig {
 		http.cors().configurationSource(request -> {
 			var cors = new CorsConfiguration();
 		      cors.setAllowedOrigins(List.of("http://localhost:3000","http://ecommerce-a-api-v1.up.railway.app"));
-		      cors.setAllowedMethods(List.of("GET","POST", "PUT", "DELETE", "OPTIONS"));
 		      cors.setAllowedHeaders(List.of("*"));
 		      return cors;
 		});

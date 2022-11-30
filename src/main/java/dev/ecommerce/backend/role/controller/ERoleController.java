@@ -36,7 +36,7 @@ public class ERoleController {
 	}
 	@PutMapping("/update/{role-id}")
 	public Object updateRole(@PathVariable(name="role-id") String roleId,
-								@RequestBody @Valid ERoleDTO dto,
+								@RequestBody ERoleDTO dto,
 								BindingResult bindingResult) {
 		if(bindingResult.hasErrors())
 			return ResponseHelper.getErrorResponse(bindingResult, HttpStatus.BAD_REQUEST);
@@ -44,7 +44,6 @@ public class ERoleController {
 		ERoleDTO newDTO = service.updateRole(roleId, dto);
 		if(newDTO == null)
 			return ResponseHelper.getErrorResponse("Role is not existed", HttpStatus.BAD_REQUEST);
-		
 		
 		return ResponseHelper.getResponse(newDTO, HttpStatus.OK);
 	}
