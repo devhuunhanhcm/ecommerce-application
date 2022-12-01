@@ -49,7 +49,7 @@ public class SecurityConfig {
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.cors().configurationSource(request -> {
 			var cors = new CorsConfiguration();
-		      cors.setAllowedOrigins(List.of("http://localhost:3000","http://ecommerce-a-api-v1.up.railway.app"));
+		      cors.setAllowedOrigins(List.of("http://localhost:3000/","http://ecommerce-a-api-v1.up.railway.app"));
 		      cors.setAllowedMethods(List.of("GET","POST", "PUT", "DELETE", "OPTIONS"));
 		      cors.setAllowedHeaders(List.of("*"));
 		      return cors;
@@ -61,7 +61,6 @@ public class SecurityConfig {
 		//API AUTHENTICATION 
 		http.antMatcher("/api/v1/**").authorizeRequests()
 			.antMatchers("/api/v1/auth/login").permitAll()
-			.antMatchers("/products").permitAll()
 			.antMatchers("/api/v1/auth/register").permitAll()
 			.anyRequest().authenticated();
 		return http.build();
