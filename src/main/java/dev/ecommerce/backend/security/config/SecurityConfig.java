@@ -61,6 +61,7 @@ public class SecurityConfig {
 		//API AUTHENTICATION 
 		http.antMatcher("/api/v1/**").authorizeRequests()
 			.antMatchers("/api/v1/auth/login").permitAll()
+			.antMatchers("/products").permitAll()
 			.antMatchers("/api/v1/auth/register").permitAll()
 			.anyRequest().authenticated();
 		return http.build();
