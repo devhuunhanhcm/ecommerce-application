@@ -23,7 +23,7 @@ import dev.ecommerce.backend.product.dto.EProductUpdateDTO;
 import dev.ecommerce.backend.product.service.EProductService;
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping("/api/v1/products")
 public class EProductController {
 	@Autowired
 	private EProductService service;

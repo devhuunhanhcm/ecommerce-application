@@ -1,5 +1,7 @@
 package dev.ecommerce.backend.product.dto;
 
+import java.util.UUID;
+
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -17,6 +19,8 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @SuperBuilder
 public class EProductDTO {
+	private UUID id;
+	
 	@NotBlank(message="{product.title.notNull}")
 	private String title;
 	

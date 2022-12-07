@@ -22,48 +22,49 @@ import dev.ecommerce.backend.security.jwt.JwtAuthenrizationFilter;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true,
-							securedEnabled = true,
-							jsr250Enabled =  true)
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
 public class SecurityConfig {
 	@Autowired
 	private JwtAuthenrizationFilter jwtFilter;
+
 	@Bean
 	public PasswordEncoder getPasswordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
+
 	@Bean
-	public AuthenticationManager authManager(HttpSecurity http,
-											BCryptPasswordEncoder bCryptPasswordEncoder,
-											UserDetailsService userDetailService) 
-											throws Exception {
-		
-		return http.getSharedObject(AuthenticationManagerBuilder.class)
-					.userDetailsService(userDetailService)
-					.passwordEncoder(bCryptPasswordEncoder)
-					.and()
-					.build();
+	public AuthenticationManager authManager(HttpSecurity http, BCryptPasswordEncoder bCryptPasswordEncoder,
+			UserDetailsService userDetailService) throws Exception {
+
+		return http.getSharedObject(AuthenticationManagerBuilder.class).userDetailsService(userDetailService)
+				.passwordEncoder(bCryptPasswordEncoder).and().build();
 	}
-	
+
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
 		http.cors().configurationSource(request -> {
-			var cors = new CorsConfiguration();
-		      cors.setAllowedOrigins(List.of("http://localhost:3000","http://ecommerce-a-api-v1.up.railway.app"));
-		      cors.setAllowedMethods(List.of("GET","POST", "PUT", "DELETE"));
-		      cors.setAllowedHeaders(List.of("*"));
-		      return cors;
+			CorsConfiguration cors = new CorsConfiguration();
+			cors.setAllowedOrigins(List.of("http://localhost:3000"));
+			cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+			cors.setAllowedHeaders(List.of("*"));
+			cors.setAllowCredentials(true);
+			cors.setExposedHeaders(List.of("Authorization"));
+			return cors;
 		});
+		
 		http.csrf().disable();
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-		//JWT filter 
+		// JWT filter
 		http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-		//API AUTHENTICATION 
+		// API AUTHENTICATION
 		http.antMatcher("/api/v1/**").authorizeRequests()
 			.antMatchers("/api/v1/auth/login").permitAll()
 			.antMatchers("/api/v1/auth/register").permitAll()
-			.anyRequest().authenticated();
+			.antMatchers("/api/v1/products").permitAll()
+			.anyRequest()
+			.authenticated();
 		return http.build();
 	}
-	
+
 }
