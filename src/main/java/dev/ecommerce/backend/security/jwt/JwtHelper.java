@@ -17,7 +17,7 @@ import io.jsonwebtoken.UnsupportedJwtException;
 @Component
 public class JwtHelper {
 	private static final String PREFIX = "Bearer ";
-	private static final long EXPIRE_DURATION = 1 * 60 * 60 * 1000; // 1 hour
+	private static final long EXPIRE_DURATION = 1 * 5 * 60 * 1000; // 5 minute
 	
 	@Value("${app.jwt.secret}")
 	private String SECRET_KEY;

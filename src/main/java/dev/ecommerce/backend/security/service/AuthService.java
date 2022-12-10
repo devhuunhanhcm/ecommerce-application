@@ -7,4 +7,5 @@ import dev.ecommerce.backend.user.dto.EUserWithTokenDTO;
 public interface AuthService {
 	EUserWithTokenDTO login(LoginDTO dto);
 	String register(EUserRegisterDTO dto);
+	boolean logout(String userId, String refreshToken);
 }
