@@ -62,9 +62,11 @@ public class SecurityConfig {
 			.antMatchers("/api/v1/auth/login").permitAll()
 			.antMatchers("/api/v1/auth/register").permitAll()
 			.antMatchers("/api/v1/products").permitAll()
+			.antMatchers("/api/v1/auth/refresh-token").permitAll()
 			.anyRequest()
 			.authenticated();
 		return http.build();
 	}
+	
 
 }
