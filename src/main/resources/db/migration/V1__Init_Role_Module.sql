@@ -1,4 +1,4 @@
-CREATE TABLE e_group (
+   CREATE TABLE e_group (
 	ID 					VARCHAR ( 36 ) NOT NULL,
 	created_at 			TIMESTAMP,
 	created_by 			VARCHAR ( 36 ),

@@ -56,6 +56,7 @@ public class JwtHelper {
 
 	public String getToken(HttpServletRequest request) {
 		String jwt = request.getHeader("Authorization");
+		System.out.println(jwt);
 		if(jwt == null)
 			return jwt;
 				

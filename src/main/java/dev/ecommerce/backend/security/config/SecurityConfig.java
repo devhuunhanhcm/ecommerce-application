@@ -45,14 +45,13 @@ public class SecurityConfig {
 
 		http.cors().configurationSource(request -> {
 			CorsConfiguration cors = new CorsConfiguration();
-			cors.setAllowedOrigins(List.of("http://localhost:3000"));
-			cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+			cors.setAllowedOrigins(List.of("http://localhost:3000","http://127.0.0.1:3000/"));
+			cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE","OPTIONS"));
 			cors.setAllowedHeaders(List.of("*"));
 			cors.setAllowCredentials(true);
-			cors.setExposedHeaders(List.of("Authorization"));
+			cors.setExposedHeaders(List.of("*"));
 			return cors;
 		});
-		
 		http.csrf().disable();
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		// JWT filter

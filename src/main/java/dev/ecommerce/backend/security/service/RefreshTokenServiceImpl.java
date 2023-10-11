@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import dev.ecommerce.backend.security.dto.RefreshTokenDTO;
 import dev.ecommerce.backend.security.exception.TokenRefreshException;
 import dev.ecommerce.backend.security.jwt.JwtHelper;
 import dev.ecommerce.backend.security.model.RefreshToken;
@@ -59,8 +60,8 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 	}
 
 	@Override
-	public String refreshToken(String token) {
-		Optional<RefreshToken> tokenOpt = findByToken(token);
+	public RefreshTokenDTO refreshToken(RefreshTokenDTO refreshToken) {
+		Optional<RefreshToken> tokenOpt = findByToken(refreshToken.getToken());
 		
 		if(tokenOpt.isEmpty())
 			return null;
@@ -71,7 +72,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 		
 		String newToken = refreshTokenWithUsername(verifyRefreshToken.getUser().getUsername());
 		
-		return newToken;
+		return RefreshTokenDTO.builder().token(newToken).build();
 	}
 
 	@Override

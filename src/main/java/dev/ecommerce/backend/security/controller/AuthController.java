@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.validation.BindingResult;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dev.ecommerce.backend.common.helper.ResponseHelper;
 import dev.ecommerce.backend.security.dto.LoginDTO;
+import dev.ecommerce.backend.security.dto.RefreshTokenDTO;
 import dev.ecommerce.backend.security.service.AuthService;
 import dev.ecommerce.backend.security.service.RefreshTokenService;
 import dev.ecommerce.backend.user.dto.EUserRegisterDTO;
@@ -31,9 +34,12 @@ public class AuthController {
 	private AuthService service;
 	@Autowired
 	private RefreshTokenService refreshTokenService;
+
+	@Value("${app.refreshTokenDurationSeconds}")
+	private int refreshTokenDurationSeconds;
 	
 	@PostMapping("/login")
-	public Object login(@Valid @RequestBody LoginDTO dto,BindingResult bindingResult,HttpServletResponse response) {
+	public Object login(@Valid @RequestBody LoginDTO dto,BindingResult bindingResult) {
 		if(bindingResult.hasErrors())
 			return ResponseHelper.getErrorResponse(bindingResult, HttpStatus.BAD_REQUEST);
 		
@@ -41,10 +47,7 @@ public class AuthController {
 		
 		if(userWithToken == null)
 			return ResponseHelper.getErrorResponse("Username or password is not correct.", HttpStatus.BAD_REQUEST);
-		Cookie refreshTokenCookie = new Cookie("refreshToken", userWithToken.getRefreshToken());
-		refreshTokenCookie.setHttpOnly(true);
-		refreshTokenCookie.setSecure(false);
-		response.addCookie(refreshTokenCookie);
+		
 		return ResponseHelper.getResponse(userWithToken,HttpStatus.OK);
 	}
 	@GetMapping("/register")
@@ -58,25 +61,24 @@ public class AuthController {
 	
 	@PostMapping("/logout/{user-id}")
 	public Object logout(	@PathVariable(name="user-id") String userId,
-							@CookieValue(name="refreshToken",defaultValue = "") String refreshToken,
-							HttpServletResponse response) {
-		boolean isLoggedOut = service.logout(userId,refreshToken);
+							@RequestBody RefreshTokenDTO refreshToken) {
+		
+		boolean isLoggedOut = service.logout(userId,refreshToken.getToken());
 		if(!isLoggedOut)
 			return ResponseHelper.getErrorResponse("Log out Fail.User is not existed.", HttpStatus.BAD_REQUEST);
-		Cookie deleteTokenCookie = new Cookie("refreshToken",null);
-		deleteTokenCookie.setMaxAge(0);
-		response.addCookie(deleteTokenCookie);
+		
 		return ResponseHelper.getResponse("Log out successfull.", HttpStatus.OK);
 	}
 	
 	@PostMapping("/refresh-token")
-	public Object refreshToken(@CookieValue(name="refreshToken",defaultValue = "") String token) {
-		if(token.equals(""))
+	public Object refreshToken(@RequestBody RefreshTokenDTO refreshToken) {
+		if(refreshToken == null)
 			return ResponseHelper.getErrorResponse("You don't have refresh token key.Please login again.", HttpStatus.BAD_REQUEST);
 		
-		String newToken = refreshTokenService.refreshToken(token);
-		if(newToken == null)
+		RefreshTokenDTO newRefreshToken = refreshTokenService.refreshToken(refreshToken);
+		if(newRefreshToken == null)
 			return ResponseHelper.getErrorResponse("Refresh token was expired. Please make a new signin request.", HttpStatus.BAD_REQUEST);
-		return ResponseHelper.getResponse(newToken, HttpStatus.OK);
+		return ResponseHelper.getResponse(newRefreshToken, HttpStatus.OK);
 	}
+	
 }
